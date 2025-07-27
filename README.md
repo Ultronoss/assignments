@@ -59,7 +59,7 @@ secure-video-upload/
 #### Option 1: Automated Setup
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone git@github.com:Ultronoss/assignments.git
 cd secure-video-upload
 ```
 
