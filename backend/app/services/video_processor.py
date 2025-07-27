@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class VideoProcessor:
     def __init__(self):
         self.bootstrap_servers = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
+        logger.info(f"Video Processor - Kafka bootstrap servers: {self.bootstrap_servers}")
         self.topic = "video-processing"
         self.consumer = None
         

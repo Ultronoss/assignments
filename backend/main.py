@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import upload, files
+from app.routes import upload, files, streaming
 from app.database import engine
 from app.models import Base
 
@@ -25,6 +25,7 @@ app.add_middleware(
 # Include routers
 app.include_router(upload.router, prefix="/api", tags=["upload"])
 app.include_router(files.router, prefix="/api", tags=["files"])
+app.include_router(streaming.router, prefix="/api", tags=["streaming"])
 
 @app.get("/")
 async def root():

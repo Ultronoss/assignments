@@ -16,6 +16,8 @@ A web application that allows users to upload video files with client-side encry
 - Client-side encryption before upload
 - File metadata storage in PostgreSQL
 - Asynchronous processing with Kafka
+- **🎥 Video streaming with Kafka-based decryption**
+- **📡 Real-time video playback via WebSocket/EventSource**
 - Modern React UI with drag-and-drop upload
 - File validation and progress tracking
 
@@ -146,12 +148,18 @@ docker-compose down -v
    - Click "Upload Video"
    - Wait for the upload to complete
 
-2. **Download a Video:**
+2. **Play a Video (NEW!):**
+   - In the file list, click "Play" next to any processed file
+   - Enter the same encryption key used during upload
+   - Enjoy smooth video playback with full controls
+   - Video is decrypted and streamed in real-time via Kafka
+
+3. **Download a Video:**
    - In the file list, click "Download" next to any file
    - Enter the same encryption key used during upload
    - The file will be decrypted and downloaded
 
-3. **Delete a File:**
+4. **Delete a File:**
    - Click "Delete" next to any file in the list
    - Confirm the deletion
 
@@ -186,6 +194,9 @@ curl -X POST http://localhost:8000/api/files/{file_id}/decrypt \
 | `GET` | `/api/files/{file_id}` | Get file metadata |
 | `POST` | `/api/files/{file_id}/decrypt` | Decrypt and download file |
 | `DELETE` | `/api/files/{file_id}` | Delete a file |
+| **`POST`** | **`/api/stream/{file_id}`** | **Initiate video streaming** |
+| **`GET`** | **`/api/stream/{file_id}/chunks/{request_id}`** | **Get video chunks via SSE** |
+| **`WS`** | **`/api/ws/stream/{request_id}`** | **WebSocket video streaming** |
 
 ## 🔒 Security Features
 
@@ -238,6 +249,7 @@ secure-video-upload/
 | **postgres** | 5432 | PostgreSQL database |
 | **kafka** | 9092 | Apache Kafka broker |
 | **zookeeper** | 2181 | Kafka coordination |
+| **streaming-processor** | - | Kafka streaming consumer |
 
 ## 📝 Development
 
@@ -260,3 +272,13 @@ npm start
 - `UPLOAD_DIR`: Directory for file uploads
 - `MAX_FILE_SIZE`: Maximum file size in bytes
 - For encryption I used `my-secret-key-123`. AI was used for api testing and creating documentation
+
+## 🎥 Video Streaming Documentation
+
+For detailed information about the video streaming functionality, see [VIDEO_STREAMING.md](VIDEO_STREAMING.md).
+
+### Quick Test
+Run the streaming test script to verify functionality:
+```bash
+python test_streaming.py
+```

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Download, Trash2, FileVideo, Calendar, HardDrive } from 'lucide-react';
+import { Download, Trash2, FileVideo, Calendar, HardDrive, Play } from 'lucide-react';
 import { FileInfo } from '../types';
+import VideoPlayer from './VideoPlayer';
 
 interface FileListProps {
   files: FileInfo[];
@@ -12,6 +13,7 @@ const FileList: React.FC<FileListProps> = ({ files, onFileDeleted }) => {
   const [deleting, setDeleting] = useState<number | null>(null);
   const [encryptionKey, setEncryptionKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState<number | null>(null);
+  const [playingFile, setPlayingFile] = useState<FileInfo | null>(null);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -94,6 +96,11 @@ const FileList: React.FC<FileListProps> = ({ files, onFileDeleted }) => {
     }
   };
 
+  const handlePlay = (file: FileInfo) => {
+    console.log('Play button clicked for file:', file);
+    setPlayingFile(file);
+  };
+
   if (files.length === 0) {
     return (
       <div className="text-center py-12">
@@ -155,6 +162,16 @@ const FileList: React.FC<FileListProps> = ({ files, onFileDeleted }) => {
                 />
               )}
               
+              {/* Play Button */}
+              <button
+                onClick={() => handlePlay(file)}
+                disabled={!file.is_processed}
+                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+              >
+                <Play className="h-4 w-4 mr-1" />
+                Play
+              </button>
+              
               {/* Download Button */}
               <button
                 onClick={() => handleDownload(file)}
@@ -186,6 +203,15 @@ const FileList: React.FC<FileListProps> = ({ files, onFileDeleted }) => {
           </div>
         </div>
       ))}
+      
+      {/* Video Player Modal */}
+      {playingFile && (
+        <VideoPlayer
+          fileId={playingFile.id}
+          filename={playingFile.original_filename}
+          onClose={() => setPlayingFile(null)}
+        />
+      )}
     </div>
   );
 };

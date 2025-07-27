@@ -36,7 +36,8 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
     networks:
@@ -73,6 +74,44 @@ services:
       REACT_APP_API_URL: http://localhost:8000
     depends_on:
       - backend
+    networks:
+      - app-network
+
+  # Video Processor
+  video-processor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: python processor.py
+    environment:
+      DATABASE_URL: postgresql://video_user:secure_password@postgres:5432/secure_video_db
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - app-network
+
+  # Video Streaming Processor
+  streaming-processor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: python streaming_processor.py
+    environment:
+      DATABASE_URL: postgresql://video_user:secure_password@postgres:5432/secure_video_db
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+    depends_on:
+      - postgres
+      - kafka
     networks:
       - app-network
 

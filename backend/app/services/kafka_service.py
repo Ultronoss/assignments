@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 class KafkaService:
     def __init__(self):
         self.bootstrap_servers = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
+        logger.info(f"Kafka Service - Bootstrap servers: {self.bootstrap_servers}")
         self.producer = None
         self.consumer = None
         self.video_processing_topic = "video-processing"
