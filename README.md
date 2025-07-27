@@ -259,15 +259,4 @@ npm start
 - `KAFKA_BOOTSTRAP_SERVERS`: Kafka broker addresses
 - `UPLOAD_DIR`: Directory for file uploads
 - `MAX_FILE_SIZE`: Maximum file size in bytes
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - see LICENSE file for details 
+- For encryption I used `my-secret-key-123`. AI was used for api testing and creating documentation
